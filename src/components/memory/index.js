@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import MemoryCard from "./MemoryCard";
 import StatusBar from "./StatusBar";
 import "./index.css";
+import * as utils from "../../utils";
 
 const colors = [
   "pink",
@@ -41,6 +42,12 @@ function flipCard(cards, cardToFlip) {
 }
 
 function Memory() {
+  /*
+  utils
+    .fetchLeaderboard("memory")
+    .then((leaderboard) => console.log(leaderboard));
+  */
+
   // const startTime = Date.now();
   // const interval = setInterval(() => console.log(Date.now() - startTime, 1000)); clearInterval(interval);
 
@@ -62,6 +69,17 @@ function Memory() {
       return () => clearInterval(intervalId);
     }
   }, [startTime, win]);
+
+  useEffect(() => {
+    if (win) {
+      utils
+        .saveScore("memory", {
+          name: "Prae",
+          timeMs: elapsedTime,
+        })
+        .then(() => console.log("Score saved."));
+    }
+  }, [win]);
 
   function onCardClicked(clickedCard) {
     // If the card is already flipped there is nothing we need to do (write an if-statement with a return; inside)
