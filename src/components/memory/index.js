@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MemoryCard from "./MemoryCard";
 import StatusBar from "./StatusBar";
 import "./index.css";
@@ -41,12 +41,27 @@ function flipCard(cards, cardToFlip) {
 }
 
 function Memory() {
+  // const startTime = Date.now();
+  // const interval = setInterval(() => console.log(Date.now() - startTime, 1000)); clearInterval(interval);
+
   const [game, setGame] = useState({
     cards: generateCards(),
     firstCard: undefined,
     secondCard: undefined,
   });
-  const status = "Time: 0s";
+
+  const [startTime, setStartTime] = useState(0);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const [win, setWin] = useState(false);
+
+  useEffect(() => {
+    if (startTime !== 0 && !win) {
+      const intervalId = setInterval(() => {
+        setElapsedTime(Date.now() - startTime);
+      }, 1000);
+      return () => clearInterval(intervalId);
+    }
+  }, [startTime, win]);
 
   function onCardClicked(clickedCard) {
     // If the card is already flipped there is nothing we need to do (write an if-statement with a return; inside)
@@ -71,8 +86,14 @@ function Memory() {
       // 2. Else, if firstCard is defined, but secondCard isn't =>
       // we should flip the clicked card, keep the firstCard as is, but set the secondCard
       else if (!secondCard) {
+        let newCards = flipCard(cards, clickedCard);
+        let isAllCardsFlipped = newCards.every((card) => card.isFlipped);
+        if (isAllCardsFlipped) {
+          setWin(true);
+          console.log("You won!");
+        }
         return {
-          cards: flipCard(cards, clickedCard),
+          cards: newCards,
           firstCard: firstCard,
           secondCard: clickedCard,
         };
@@ -100,6 +121,9 @@ function Memory() {
         }
       }
     });
+    setStartTime((oldStartTime) =>
+      oldStartTime === 0 ? Date.now() : oldStartTime
+    );
   }
 
   function onRestart() {
@@ -108,12 +132,18 @@ function Memory() {
       firstCard: undefined,
       secondCard: undefined,
     });
+    setStartTime(0);
+    setElapsedTime(0);
+    setWin(false);
   }
 
   return (
     <div>
       <div className="game-container">
-        <StatusBar status={status} onRestart={onRestart}></StatusBar>
+        <StatusBar
+          status={"Time: " + elapsedTime}
+          onRestart={onRestart}
+        ></StatusBar>
         <div className="memory-grid">
           {game.cards.map((card) => (
             <MemoryCard
