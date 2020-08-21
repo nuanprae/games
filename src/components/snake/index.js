@@ -7,11 +7,25 @@ const height = 12;
 
 function Snake() {
   const [game, setGame] = useState(helpers.generateGame());
+  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
-    const intervalId = setInterval(() => setGame(helpers.tick), 400);
+    if (gameOver) return;
+    const intervalId = setInterval(
+      () =>
+        setGame((oldGame) => {
+          const newGame = helpers.tick(oldGame);
+          if (helpers.isGameOver(newGame)) {
+            setGameOver(true);
+            console.log("you lose");
+            return oldGame;
+          }
+          return newGame;
+        }),
+      200
+    );
     return () => clearInterval(intervalId);
-  }, []);
+  }, [gameOver]);
 
   useEffect(() => {
     window.addEventListener("keydown", handleKeyPress);
@@ -40,7 +54,7 @@ function Snake() {
     }
     if (newDir) {
       setGame((oldGame) => {
-        return { ...oldGame.snake, dir: newDir };
+        return { ...oldGame, snake: { ...oldGame.snake, dir: newDir } };
       });
     }
   }
