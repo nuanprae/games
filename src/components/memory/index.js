@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import MemoryCard from "./MemoryCard";
-import StatusBar from "./StatusBar";
+import StatusBar from "../StatusBar";
+import ResultModal from "../ResultModal";
 import "./index.css";
 import * as utils from "../../utils";
 
@@ -60,6 +61,7 @@ function Memory() {
   const [startTime, setStartTime] = useState(0);
   const [elapsedTime, setElapsedTime] = useState(0);
   const [win, setWin] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     if (startTime !== 0 && !win) {
@@ -72,12 +74,7 @@ function Memory() {
 
   useEffect(() => {
     if (win) {
-      utils
-        .saveScore("memory", {
-          name: "Prae",
-          timeMs: elapsedTime,
-        })
-        .then(() => console.log("Score saved."));
+      setShowModal(true);
     }
   }, [win]);
 
@@ -173,6 +170,12 @@ function Memory() {
           ))}
         </div>
       </div>
+      <ResultModal
+        show={showModal}
+        handleClose={() => setShowModal(false)}
+        header={"Congrats, you won!"}
+        body={"Your time was " + elapsedTime + " ms."}
+      ></ResultModal>
     </div>
   );
 }
