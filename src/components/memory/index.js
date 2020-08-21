@@ -152,6 +152,20 @@ function Memory() {
     setWin(false);
   }
 
+  function fetchLeaderboard() {
+    return utils
+      .fetchLeaderboard("memory", [["timeMs", "asc"]])
+      .then((leaderboard) =>
+        leaderboard.map(
+          (score, i) => `${i + 1}. ${score.name}: ${score.timeMs}ms`
+        )
+      );
+  }
+
+  function saveScore(name, timeMs) {
+    utils.saveScore("memory", { name, timeMs });
+  }
+
   return (
     <div>
       <div className="game-container">
@@ -175,6 +189,8 @@ function Memory() {
         handleClose={() => setShowModal(false)}
         header={"Congrats, you won!"}
         body={"Your time was " + elapsedTime + " ms."}
+        fetchLeaderboard={fetchLeaderboard}
+        saveScore={(name) => saveScore(name, elapsedTime)}
       ></ResultModal>
     </div>
   );
