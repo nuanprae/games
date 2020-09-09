@@ -1,0 +1,25 @@
+.thai-container {
+  margin: 5vw;
+  display: flex;
+}
+.phonemes-grid {
+  display: grid;
+  width: 50vw;
+  height: 40vw;
+  border: solid 1px red;
+  grid-template-columns: repeat(3, auto);
+  grid-template-rows: repeat(3, auto);
+  grid-gap: 1vw;
+}
+
+.graphemes-grid {
+  display: grid;
+  width: 50vw;
+  height: 40vw;
+  border: solid 1px blue;
+  grid-template-columns: repeat(3, auto);
+  grid-template-rows: repeat(3, auto);
+  grid-gap: 1vw;
+  justify-items: stretch;
+  align-items: center;
+}

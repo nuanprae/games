@@ -20,6 +20,9 @@ const Navigation = () => (
         <Link to="/minesweeper" className="nav-link">
           Minesweeper
         </Link>
+        <Link to="/thai" className="nav-link">
+          Thai
+        </Link>
       </Nav>
     </Navbar.Collapse>
   </Navbar>
