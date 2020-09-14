@@ -1,6 +1,7 @@
 .thai-container {
   margin: 5vw;
   display: flex;
+  background: aquamarine;
 }
 .phonemes-grid {
   display: grid;
@@ -11,7 +12,6 @@
   grid-template-rows: repeat(3, auto);
   grid-gap: 1vw;
 }
-
 .graphemes-grid {
   display: grid;
   width: 50vw;
