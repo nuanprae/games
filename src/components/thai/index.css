@@ -11,6 +11,8 @@
   grid-template-columns: repeat(3, auto);
   grid-template-rows: repeat(3, auto);
   grid-gap: 1vw;
+  justify-items: stretch;
+  align-items: center;
 }
 .graphemes-grid {
   display: grid;
